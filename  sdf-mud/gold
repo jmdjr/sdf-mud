@@ -1,0 +1,81 @@
+   for( keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room )
+   if( !IS_NPC( ch ) && xIS_SET( ch->act, PLR_KILLER ) )
+      sprintf( buf, "shout %s the KILLER is over here!\r\n", ch->name );
+   if( !IS_NPC( ch ) && xIS_SET( ch->act, PLR_THIEF ) )
+      sprintf( buf, "shout %s the THIEF is over here!\r\n", ch->name );
+   speakswell = UMIN( knows_language( keeper, ch->speaking ), knows_language( ch, ch->speaking ) );
+         sprintf( buf, "%s Could you repeat that?  I didn't quite catch it.", ch->name );
+         sprintf( buf, "%s Could you say that a little more clearly please?", ch->name );
+         sprintf( buf, "%s Sorry... What was that you wanted?", ch->name );
+         sprintf( buf, "%s I can't understand you.", ch->name );
+   for( keeper = ch->in_room->first_person; keeper; keeper = keeper->next_in_room )
+   if( !IS_NPC( ch ) && xIS_SET( ch->act, PLR_KILLER ) )
+      sprintf( buf, "shout %s the KILLER is over here!\r\n", ch->name );
+   if( !IS_NPC( ch ) && xIS_SET( ch->act, PLR_THIEF ) )
+      sprintf( buf, "shout %s the THIEF is over here!\r\n", ch->name );
+   speakswell = UMIN( knows_language( keeper, ch->speaking ), knows_language( ch, ch->speaking ) );
+         sprintf( buf, "%s Could you repeat that?  I didn't quite catch it.", ch->name );
+         sprintf( buf, "%s Could you say that a little more clearly please?", ch->name );
+         sprintf( buf, "%s Sorry... What was that you wanted?", ch->name );
+         sprintf( buf, "%s I can't understand you.", ch->name );
+   if( ch->gold > ( ch->level * ch->level * 100000 ) )
+         + ( ( URANGE( 5, ch->level, LEVEL_AVATAR ) - 20 ) / 2 );
+      cost = ( int )( cost * ( 80 + UMIN( ch->level, LEVEL_AVATAR ) ) ) / 100;
+      switch ( ch->race )  /* racism... should compare against shopkeeper's race */
+   if( IS_SET( ch->in_room->room_flags, ROOM_PET_SHOP ) )
+      pRoomIndexNext = get_room_index( ch->in_room->vnum + 1 );
+         bug( "Do_buy: bad pet shop at vnum %d.", ch->in_room->vnum );
+      in_room = ch->in_room;
+      ch->in_room = pRoomIndexNext;
+      ch->in_room = in_room;
+      if( xIS_SET( ch->act, PLR_BOUGHT_PET ) )
+      wealth = get_value( ch->gold, ch->silver, ch->copper );
+      if( ch->level < pet->level )
+      if( ch->gold < gcost || ch->silver < scost || ch->copper < ccost )
+         ch->gold -= gcost;
+         ch->silver -= scost;
+         ch->copper -= ccost;
+      boost_economy( ch->in_room->area, maxgold );
+      xSET_BIT( ch->act, PLR_BOUGHT_PET );
+      sprintf( buf, "%sA neck tag says 'I belong to %s'.\r\n", pet->description, ch->name );
+      char_to_room( pet, ch->in_room );
+            ch->reply = keeper;
+         ch->reply = keeper;
+         ch->reply = keeper;
+      plrmoney = get_value( ch->gold, ch->silver, ch->copper );
+         ch->reply = keeper;
+      if( obj->level > ch->level )
+         ch->reply = keeper;
+      if( xIS_SET( keeper->act, ACT_GLORYSHOP ) && ch->pcdata->quest_curr < tvalue )
+         ch->reply = keeper;
+         ch->reply = keeper;
+         ch->reply = keeper;
+      if( ch->carry_number + get_obj_number( obj ) > can_carry_n( ch ) )
+      if( ch->carry_weight + ( get_obj_weight( obj ) * noi ) + ( noi > 1 ? 2 : 0 ) > can_carry_w( ch ) )
+         ch->pcdata->quest_curr -= tvalue;
+      else if( ch->gold < gcost || ch->silver < scost || ch->copper < ccost )
+         plrmoney = get_value( ch->gold, ch->silver, ch->copper );
+         ch->gold -= gcost;
+         ch->silver -= scost;
+         ch->copper -= ccost;
+   if( IS_SET( ch->in_room->room_flags, ROOM_PET_SHOP ) )
+      pRoomIndexNext = get_room_index( ch->in_room->vnum + 1 );
+         bug( "Do_list: bad pet shop at vnum %d.", ch->in_room->vnum );
+      ch->reply = keeper;
+   ch->gold += gcost;
+   ch->silver += scost;
+   ch->copper += ccost;
+      ch->reply = keeper;
+   ch->reply = keeper;
+   plrmoney = get_value( ch->gold, ch->silver, ch->copper );
+      if( ch->gold < gcost || ch->silver < scost || ch->copper < ccost )
+         plrmoney = get_value( ch->gold, ch->silver, ch->copper );
+         ch->gold -= gcost;
+         ch->silver -= scost;
+         ch->copper -= ccost;
+      for( obj = ch->first_carrying; obj; obj = obj->next_content )
+      ch->reply = keeper;
+   for( obj = ch->first_carrying; obj != NULL; obj = obj->next_content )
+      if( total > get_value( ch->gold, ch->silver, ch->copper ) )
+      ch->reply = keeper;
+   if( cost > get_value( ch->gold, ch->silver, ch->copper ) )

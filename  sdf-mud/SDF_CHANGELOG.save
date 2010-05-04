@@ -1,0 +1,80 @@
+I wish I could remember the format we used to use, it was nice. It doesn't
+matter though. Just note the functions and files you edited, and what your
+changes did. Comments in the code are always good too.
+
+Added do_trance, ruminate and meditate to skills.c. Also added a ! to do_group 
+(act_comm.c) to make it so mana is actually displayed
+-Andy November 2, 2008
+
+Fixed mud.h's dice_parse function's parameter name. Was 'exp', now it's 'exp2'.
+This should prevent the name comflict with math.h's exp function, or whatever
+it was. I still don't know how math.h is bring included.
+-Batman November 2, 2008
+
+Fixed skills.c's tumbling function. It now does not call chance to check if
+your align agrees with your clan's align.
+-Batman November 2, 2008
+
+Finished up on ruminate, trance and meditate in skills.c. Also did what was
+needed to add gsns for all of them. I did a tiny change to do_peace in
+act_wiz.c, too.
+-Andy November 4, 2008
+
+Fixed the sys_bugs argument in do_fshow (act_wiz.c) and added last_bugs 
+argument.
+-Andy November 5, 2008
+
+Fixed the issue with any class/race being able to Mistwalk.
+-Tron November 6, 2008
+
+Fixed fshow helps, and updated fshow clear in the function do_fshow and
+do_fclear (both in act_wiz.c) and updated mud.h with a definition for
+NOHELP_FILE. Also edited act_info.c so as to log to system/nohelp.txt
+when soembody tries to access a non-existant help file.
+-Andy November 7, 2008 
+
+Created do_visogy function. The problem with it was, I think, that it was 
+a skill, and the code was set up to treat it as a spell. Files edited: 
+do.c, skills.c
+-Andy November 8, 2008
+
+Fixed a Memory leak with clean_obj_queue. It was supposed to clean up 
+the memory of an extracted object.
+-Tron November 9th, 2008
+
+Uncommented four lines in update.  related to bloodthirst.  
+I'm not sure why they were commented out in the first place, but it
+is part of the function that magic.c (gain_condition) to update blood
+values, and contains a function that gain_condition is calling to perform
+a full update.  Still trying to trace all the connections to determine 
+why a successful (or unsuccessful) spell doesn't alter blood points.
+-Mordred November 14, 2008
+
+Commented out a call to nice() in pfiles.c. Would set priority to 20 (lowest) 
+when pfiles were scanned.
+-Marten November 15th, 2008
+
+Made it so that balzhur, destroy and suicide delete lockers in their 
+respective functions.. act_wiz.c, suicide.c
+-Andy November 16, 2008
+
+Changed do_meditate in skills.c so that NPCs can't use it. They don't need 
+it, and it was crashing the MDU.
+-Andy November 17, 2008
+
+Fixed do_loadup in act_wiz.c so that the MUD doesn't crash when you loadup a
+non-existant character.
+-Andy November 18, 2008
+
+Fixed the blood problem (not losing it), function gain_condition in 
+update.c
+-Reaper November 18, 2008
+
+Changed recall to only work for levels 0-25 and >= 100 skils.c 
+function do_recall
+-Andy November 18, 2008
+
+Commented out everywhere that made you bleed... Just grep for COND_BLEEDING
+and gain_condition. You'll see where the changes were.
+-Andy December 7, 2008
+

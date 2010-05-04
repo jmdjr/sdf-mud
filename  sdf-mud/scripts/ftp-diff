@@ -1,0 +1,6 @@
+ncftp detain << END
+cd ~/ed/src
+put ../diff.new.gz
+quit
+END
+

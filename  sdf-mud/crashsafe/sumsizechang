@@ -1,0 +1,330 @@
+>     CHAR_DATA *tmp;
+>     bool found;
+>     char argbuf[MAX_INPUT_LENGTH];
+>     char abuf[MAX_INPUT_LENGTH];
+>     char buf2[MAX_INPUT_LENGTH];
+>     char bbuf[MAX_INPUT_LENGTH];
+>     strcpy(bbuf, argument);
+>     argument = one_argument(argument, argbuf);
+>     for ( vch = ch->in_room->first_person; vch; vch = vch->next_in_room )
+>     {   
+>         if (argbuf[0] != '\0' && !str_cmp(argbuf, vch->name)) {
+>          found = TRUE;
+>            tmp = vch;
+>          break;
+>       }
+>       else
+>          found = FALSE;
+>     }
+< 
+< 
+>         if (found==TRUE && !str_cmp(argbuf, vch->name)) {
+>            strcpy(abuf,argbuf);
+>            sbuf = argument; 
+>         }
+>       else if (!found){
+>          strcpy(argument, bbuf);
+>          strcpy(sbuf, bbuf);
+>          argbuf[0] = '\0';
+>          abuf[0] = '\0';
+>       }
+<       act( AT_SAY, "$n says '$t'", ch, sbuf, vch, TO_VICT );
+>       if(found && str_cmp(argbuf, vch->name)){
+>               sprintf(buf2, "%s '%s'", tmp->name, sbuf);
+>               act( AT_SAY, "$n says to $t", ch, buf2, vch, TO_VICT );
+>       }
+>       else if(found && !str_cmp(argbuf, vch->name))
+>               act( AT_SAY, "$n says to you '$t'", ch, sbuf, vch, TO_VICT );
+>       else
+>        act( AT_SAY, "$n says '$t'", ch, sbuf, vch, TO_VICT );
+<     act( AT_SAY, "You say '$T'", ch, NULL, drunk_speech( argument, ch ), TO_CHAR
+); 
+>     if (found) {
+>       sprintf(buf2, "%s '%s'", tmp->name, drunk_speech( argument, ch ));
+>       act( AT_SAY, "You say to $T", ch, NULL, buf2, TO_CHAR);
+>     }
+>     else
+>       act( AT_SAY, "You say '$T'", ch, NULL, drunk_speech( argument, ch ),
+TO_CHAR ); 
+>     AREA_DATA *tarea;
+>     ROOM_INDEX_DATA *troom;
+>     char * sect;
+<         if ( !IS_NPC(ch) && xIS_SET(ch->act, PLR_HOLYLIGHT) )
+<               ch_printf(ch,"[%d] ",ch->in_room->vnum);
+>     switch( ch->in_room->sector_type ) {
+>         default:                        sect = "???!";          break;
+>         case SECT_INSIDE:               sect = "Inside";        break;
+>         case SECT_CITY:                 sect = "City";          break;
+>         case SECT_FIELD:                sect = "Field";         break;
+>         case SECT_FOREST:               sect = "Forest";        break;
+>         case SECT_HILLS:                sect = "Hills";         break;
+>         case SECT_MOUNTAIN:             sect = "Mountains";     break;
+>         case SECT_WATER_SWIM:           sect = "Swim";          break;
+>         case SECT_WATER_NOSWIM:         sect = "Noswim";        break;
+>         case SECT_UNDERWATER:           sect = "Underwater";    break;
+>         case SECT_AIR:                  sect = "Air";           break;
+>         case SECT_DESERT:               sect = "Desert";        break;
+>         case SECT_OCEANFLOOR:           sect = "Oceanfloor";    break;
+>         case SECT_UNDERGROUND:          sect = "Underground";   break;
+>     }
+>     troom = ch->in_room;
+>     tarea = troom->area;
+> 
+>         if ( !IS_NPC(ch) && xIS_SET(ch->act, PLR_HOLYLIGHT) ) {
+>               ch_printf(ch,"&Y[&W %d",troom->vnum);
+>        ch_printf(ch,"&Y |&W %s",tarea->filename);
+>        ch_printf(ch,"&Y |&G %s",flag_string(tarea->flags, area_flags));
+>        ch_printf(ch,"&Y |&R %s",sect);
+>        ch_printf(ch,"&Y |&G %s&Y
+]&w\n\r",flag_string(troom->room_flags,r_flags));
+>       }
+> sprintf(buf, "%s is a %s and %s, %s %s haired, %s eyed %s with %s skin.\n\r",
+victim->sex == 0
+> ? "It" : victim->sex == 1 ? "He" : "She", victim->bl, victim->bu, victim->hl,
+victim->hc,
+> victim->ec, race_table[victim->race]->race_name, victim->st);
+> send_to_char( buf, ch );
+3336c3367,3372
+<           pager_printf( ch, "&w%20.20s", skill_table[sn]->name );
+>           if ( ch->pcdata->learned[sn] == 0)
+>             pager_printf( ch, "&W%20.20s", skill_table[sn]->name );
+>             else if ( ch->pcdata->learned[sn] > 0 && ch->pcdata->learned[sn] <
+skill_table[sn]->skill_adept[ch->class])
+>           pager_printf( ch, "&Y%20.20s", skill_table[sn]->name );
+>             else if ( ch->pcdata->learned[sn] > 0)
+>             pager_printf( ch, "&R%20.20s", skill_table[sn]->name );
+<       pager_printf(ch, "\n\r'&W%s%s%s.'\n\r %s is a %s level %d %s %s, %d years
+of age.\n\r",
+>       pager_printf(ch, "\n\r'&W%s %s%s.'\n\r %s is a %s level %d %s %s, %d years
+of age.\n\r",
+> sprintf(buf, " &C%s&W is a &C%s&W and &C%s&W, &C%s %s&W haired, &C%s&W eyed
+&C%s&W with &C%s&W skin.\n\r", victim->sex == 0
+> ? "It" : victim->sex == 1 ? "He" : "She", victim->bl, victim->bu, victim->hl,
+victim->hc,
+> victim->ec, race_table[victim->race]->race_name, victim->st);
+> send_to_pager( buf, ch );
+<       char buf2[20];
+>     char buf2[MAX_STRING_LENGTH];
+<           sprintf(buf, "&Y%s&w\r\n", (ch->pcdata && ch->pcdata->bamfout[0] !=
+'\0') ? ch->pcdata->bamfout 
+<                                        : buf2);
+>           sprintf(buf, "&Y%s&w\r\n", (ch->pcdata && ch->pcdata->bamfout[0] !=
+'\0') ? ch->pcdata->bamfout : buf2);
+<       sprintf(buf2, "%s appears in a swirling mist.", ch->name);
+>       sprintf(buf2, "&Y%s appears in a swirling mist.&w", ch->name);
+<             sprintf(buf, "&Y%s&w\r\n", (ch->pcdata && ch->pcdata->bamfin[0] !=
+'\0')
+<             ? ch->pcdata->bamfin : buf2);
+>             sprintf(buf, "%s\r\n", (ch->pcdata && ch->pcdata->bamfin[0] != '\0')
+? ch->pcdata->bamfin : buf2);
+>         write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a Hair Color:\n\r", 0 );
+>         write_to_buffer( d, "(A) Black\n\r", 0 );
+>         write_to_buffer( d, "(B) White\n\r", 0 );
+>         write_to_buffer( d, "(C) Gray\n\r", 0 );
+>         write_to_buffer( d, "(D) Brown\n\r", 0 );
+>         write_to_buffer( d, "(E) Light Brown\n\r", 0 );
+>         write_to_buffer( d, "(F) Dark Brown\n\r", 0 );
+>         write_to_buffer( d, "(G) Blond\n\r", 0 );
+>         write_to_buffer( d, "(H) Light Blond\n\r", 0 );
+>         write_to_buffer( d, "(I) Dark Blond\n\r", 0 );
+>         write_to_buffer( d, "(J) Golden Blond\n\r", 0 );
+>         write_to_buffer( d, "(K) Brown Blond\n\r", 0 );
+>         write_to_buffer( d, "(L) Red\n\r", 0 );
+>         write_to_buffer( d, "(M) Red Brown\n\r", 0 );
+>         write_to_buffer( d, "(N) Red Blond\n\r", 0 );
+>         write_to_buffer( d, "(O) Blood Red\n\r", 0 );
+>         write_to_buffer( d, "(P) Orange Red\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_HAIR_COLOR;
+>         break;
+>     case CON_GET_HAIR_COLOR:
+>         switch ( argument[0] )
+>         {
+>         case 'a': case 'A': ch->hc = "Black";  break;
+>         case 'b': case 'B': ch->hc = "White";  break;
+>         case 'c': case 'C': ch->hc = "Gray";  break;
+>         case 'd': case 'D': ch->hc = "Brown";  break;
+>         case 'e': case 'E': ch->hc = "Light Brown";  break;
+>         case 'f': case 'F': ch->hc = "Dark Brown";  break;
+>         case 'g': case 'G': ch->hc = "Blond";  break;
+>         case 'h': case 'H': ch->hc = "Light Blond";  break;
+>         case 'i': case 'I': ch->hc = "Dark Blond";  break;
+>         case 'j': case 'J': ch->hc = "Golden Blond";  break;
+>         case 'k': case 'K': ch->hc = "Brown Blond";  break;
+>         case 'l': case 'L': ch->hc = "Red";  break;
+>         case 'm': case 'M': ch->hc = "Red Brown";  break;
+>         case 'n': case 'N': ch->hc = "Red Blond";  break;
+>         case 'o': case 'O': ch->hc = "Blood Red";  break;
+>         case 'p': case 'P': ch->hc = "Orange Red";  break;
+>         default:
+>             write_to_buffer( d, "That's not a hair color.\n\rWhat IS your hair
+color?", 0 );
+>             return;
+>         }
+>         write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a Hair length:\n\r", 0 );
+>         write_to_buffer( d, "(S) Short\n\r", 0 );
+>         write_to_buffer( d, "(M) Medium\n\r", 0 );
+>         write_to_buffer( d, "(L) Long\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_HAIR_LENGTH;
+>         break;
+>     case CON_GET_HAIR_LENGTH:
+>         switch ( argument[0] )
+>         {
+>         case 's': case 'S': ch->hl = "Short";  break;
+>         case 'm': case 'M': ch->hl = "Medium";  break;
+>         case 'l': case 'L': ch->hl = "Long";  break;
+>         default:
+>             write_to_buffer( d, "That's not a hair length.\n\rWhat IS your hair
+length?", 0 );
+>             return;
+>         }
+>         write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a eye color:\n\r", 0 );
+>         write_to_buffer( d, "(A) Brown.\n\r", 0 );
+>         write_to_buffer( d, "(B) Green.\n\r", 0 );
+>         write_to_buffer( d, "(C) Teal.\n\r", 0 );
+>         write_to_buffer( d, "(D) Blue-Green.\n\r", 0 );
+>         write_to_buffer( d, "(E) Hazel.\n\r", 0 );
+>         write_to_buffer( d, "(F) Blue.\n\r", 0 );
+>         write_to_buffer( d, "(G) Hazel-Blue.\n\r", 0 );
+>         write_to_buffer( d, "(H) Hazel-Green.\n\r", 0 );
+>         write_to_buffer( d, "(I) Light Brown.\n\r", 0 );
+>         write_to_buffer( d, "(J) Baby Blue.\n\r", 0 );
+>         write_to_buffer( d, "(K) Jade.\n\r", 0 );
+>         write_to_buffer( d, "(L) Red.\n\r", 0 );
+>         write_to_buffer( d, "(M) Blood-Red.\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_EYE_COLOR;
+>         break;
+>     case CON_GET_EYE_COLOR:
+>         switch ( argument[0] )
+>         {
+>         case 'a': case 'A': ch->ec = "Brown";  break;
+>         case 'b': case 'B': ch->ec = "Green";  break;
+>         case 'c': case 'C': ch->ec = "Teal";  break;
+>         case 'd': case 'D': ch->ec = "Blue Green";  break;
+>         case 'e': case 'E': ch->ec = "Hazel";  break;
+>         case 'f': case 'F': ch->ec = "Blue";  break;
+>         case 'g': case 'G': ch->ec = "Hazel Blue";  break;
+>         case 'h': case 'H': ch->ec = "Hazel Green";  break;
+>         case 'i': case 'I': ch->ec = "Light Brown"; break;
+>         case 'j': case 'J': ch->ec = "Baby Blue"; break;
+>         case 'k': case 'K': ch->ec = "Jade"; break;
+>         case 'l': case 'L': ch->ec = "Red"; break;
+>         case 'm': case 'M': ch->ec = "Blood Red"; break;
+>         default:
+>             write_to_buffer( d, "That's not a color.\n\rWhat IS your eye
+color?", 0 );
+>             return;
+>         }
+>  
+>       write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a Skin Tone:\n\r", 0 );
+>         write_to_buffer( d, "(A) Brown.\n\r", 0 );
+>         write_to_buffer( d, "(B) Pale.\n\r", 0 );
+>         write_to_buffer( d, "(C) Red.\n\r", 0 );
+>         write_to_buffer( d, "(D) White.\n\r", 0 );
+>         write_to_buffer( d, "(E) Yellow.\n\r", 0 );
+>       write_to_buffer( d, "(F) Tan.\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_SKIN_TONE;
+>         break;
+>     case CON_GET_SKIN_TONE:
+>         switch ( argument[0] )
+>         {
+>         case 'a': case 'A': ch->st = "Brown";  break;
+>         case 'b': case 'B': ch->st = "Pale";  break;
+>         case 'c': case 'C': ch->st = "Red";  break;
+>         case 'd': case 'D': ch->st = "White";  break;
+>         case 'e': case 'E': ch->st = "Yellow";  break;
+>         case 'f': case 'F': ch->st = "Tan";  break;
+>         default:
+>             write_to_buffer( d, "That's not a skin tone.\n\rWhat IS your skin
+tone?", 0 );
+>             return;
+>         }
+>       write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a Build:\n\r", 0 );
+>         write_to_buffer( d, "(A) Bone.\n\r", 0 );
+>         write_to_buffer( d, "(B) Thin.\n\r", 0 );
+>         write_to_buffer( d, "(C) Medium.\n\r", 0 );
+>         write_to_buffer( d, "(D) Large.\n\r", 0 );
+>         write_to_buffer( d, "(E) Buff.\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_BUILD;
+>         break;
+>     case CON_GET_BUILD:
+>         switch ( argument[0] )
+>         {
+>         case 'a': case 'A': ch->bu = "Bone";  break;
+>         case 'b': case 'B': ch->bu = "Thin";  break;
+>         case 'c': case 'C': ch->bu = "Medium";  break;
+>         case 'd': case 'D': ch->bu = "Large";  break;
+>         case 'e': case 'E': ch->bu = "Buff";  break;
+>         default:
+>             write_to_buffer( d, "That's not a build.\n\rWhat IS your build?", 0
+);
+>             return;
+>         }
+>       write_to_buffer( d, echo_on_str, 0 );
+>         write_to_buffer( d, "\n\rSelect a Height:\n\r", 0 );
+>         write_to_buffer( d, "(A) Midget.\n\r", 0 );
+>         write_to_buffer( d, "(B) Short.\n\r", 0 );
+>         write_to_buffer( d, "(C) Medium.\n\r", 0 );
+>         write_to_buffer( d, "(D) Tall.\n\r", 0 );
+>         write_to_buffer( d, "(E) Towering.\n\r", 0 );
+>       write_to_buffer( d, "Enter your selection: ", 0 );
+>         d->connected = CON_GET_HEIGHT;
+>         break;
+>     case CON_GET_HEIGHT:
+>         switch ( argument[0] )
+>         {
+>         case 'a': case 'A': ch->bl = "Midget";  break;
+>         case 'b': case 'B': ch->bl = "Short";  break;
+>         case 'c': case 'C': ch->bl = "Medium";  break;
+>         case 'd': case 'D': ch->bl = "Tall";  break;
+>         case 'e': case 'E': ch->bl = "Towering";  break;
+>         default:
+>             write_to_buffer( d, "That's not a height.\n\rWhat IS your height?",
+0 );
+>             return;
+>         }
+>     if ( get_trust(ch) < victim->ghost_level && ch->in_room == victim->in_room)
+>       return FALSE;
+>     if (ch->level < victim->incog_level && ch->in_room != victim->in_room)
+>       return FALSE;
+< #define IMC_VERSIONID "UCMM + World IMC Network Headquarters"
+> #define IMC_VERSIONID "imc2-1.03g RM4.0"
+<   CON_ANSI /* Josh */
+>   CON_ANSI, /* Josh */
+>   CON_GET_HAIR_COLOR, /* Josh */
+>   CON_GET_HAIR_LENGTH, /* Josh */
+>   CON_GET_EYE_COLOR, /* Josh */
+>   CON_GET_SKIN_TONE, /* Josh */
+>   CON_GET_BUILD, /* Josh */
+>   CON_GET_HEIGHT /* Josh */
+< 
+>     char *     hc;
+>     char *     ec;
+>     char *     st;
+>     char *     bu;
+>     char *     hl;
+>     char *     bl;
+>     fprintf( fp, "HC         %s~\n",  ch->hc          );
+>     fprintf( fp, "HL           %s~\n",  ch->hl                  );
+>     fprintf( fp, "EC           %s~\n",  ch->ec                  );
+>     fprintf( fp, "ST           %s~\n",  ch->st                  );
+>     fprintf( fp, "BU           %s~\n",  ch->bu                  );
+>     fprintf( fp, "BL           %s~\n",  ch->bl                  );
+>         fprintf( fp, "GhostLevel   %d\n", ch->ghost_level );
+>             KEY( "BU", ch->bu, fread_string( fp ) );
+>             KEY( "BL", ch->bl, fread_string( fp ) );
+>             KEY( "GhostLevel",  ch->ghost_level,        fread_number( fp ) );
+< 
+>             KEY( "HC", ch->hc, fread_string( fp ) );
+>             KEY( "HL", ch->hl, fread_string( fp ) );
+>             KEY( "ST", ch->st, fread_string( fp ) );
+>        KEY( "EC", ch->ec, fread_string( fp ) );

@@ -1,0 +1,153 @@
+I wish I could remember the format we used to use, it was nice. It doesn't
+matter though. Just note the functions and files you edited, and what your
+changes did. Comments in the code are always good too.
+
+Added do_trance, ruminate and meditate to skills.c. Also added a ! to do_group 
+(act_comm.c) to make it so mana is actually displayed
+-Andy November 2, 2008
+
+Fixed mud.h's dice_parse function's parameter name. Was 'exp', now it's 'exp2'.
+This should prevent the name comflict with math.h's exp function, or whatever
+it was. I still don't know how math.h is bring included.
+-Batman November 2, 2008
+
+Fixed skills.c's tumbling function. It now does not call chance to check if
+your align agrees with your clan's align.
+-Batman November 2, 2008
+
+Finished up on ruminate, trance and meditate in skills.c. Also did what was
+needed to add gsns for all of them. I did a tiny change to do_peace in
+act_wiz.c, too.
+-Andy November 4, 2008
+
+Fixed the sys_bugs argument in do_fshow (act_wiz.c) and added last_bugs 
+argument.
+-Andy November 5, 2008
+
+Fixed the issue with any class/race being able to Mistwalk.
+-Tron November 6, 2008
+
+Fixed fshow helps, and updated fshow clear in the function do_fshow and
+do_fclear (both in act_wiz.c) and updated mud.h with a definition for
+NOHELP_FILE. Also edited act_info.c so as to log to system/nohelp.txt
+when soembody tries to access a non-existant help file.
+-Andy November 7, 2008 
+
+Created do_visogy function. The problem with it was, I think, that it was 
+a skill, and the code was set up to treat it as a spell. Files edited: 
+do.c, skills.c
+-Andy November 8, 2008
+
+Fixed a Memory leak with clean_obj_queue. It was supposed to clean up 
+the memory of an extracted object.
+-Tron November 9th, 2008
+
+Uncommented four lines in update.  related to bloodthirst.  
+I'm not sure why they were commented out in the first place, but it
+is part of the function that magic.c (gain_condition) to update blood
+values, and contains a function that gain_condition is calling to perform
+a full update.  Still trying to trace all the connections to determine 
+why a successful (or unsuccessful) spell doesn't alter blood points.
+-Mordred November 14, 2008
+
+Commented out a call to nice() in pfiles.c. Would set priority to 20 (lowest) 
+when pfiles were scanned.
+-Marten November 15th, 2008
+
+Made it so that balzhur, destroy and suicide delete lockers in their 
+respective functions.. act_wiz.c, suicide.c
+-Andy November 16, 2008
+
+Changed do_meditate in skills.c so that NPCs can't use it. They don't need 
+it, and it was crashing the MDU.
+-Andy November 17, 2008
+
+Fixed do_loadup in act_wiz.c so that the MUD doesn't crash when you loadup a
+non-existant character.
+-Andy November 18, 2008
+
+Fixed the blood problem (not losing it), function gain_condition in 
+update.c
+-Reaper November 18, 2008
+
+Changed recall to only work for levels 0-25 and >= 100 skils.c 
+function do_recall
+-Andy November 18, 2008
+
+Fixed Bleeding so you bleed normally now. It was multiplying the bleed in mud_comm.c
+by 3 per hit and tick.
+-Jade Dec 5, 2008
+
+Fixed balzhur in act_wiz.c so that it removes your remort levels. Also fixed a 
+bug that i created in balzhur where it deletes the balzhur-er's locker instead 
+of the balzhur-ee's locker. Also aded a call to the system() function to 
+act_move.cto copy player files to /player/dt/Playername after hitting a DT
+-Andy Monday, December 8, 2008
+
+Fixed mset pkill. Took out scion's version and replaced it with the one that he
+had commented out. WOrks fine now :) 
+-Andy Monday, December something, 2008
+
+[Bug Fix]
+Fixed sneak command. Added do_sneak to do.c
+-Xion Dec 20, 2008 
+
+[Feature addition: trainer flag]
+Fixed Truhuga. Added special act flag spec_trainer for trainer.
+Now trainers cannot be killed.
+Fleeing donot cause exp loss.
+spec_trainer can be added to any mobile.
+-Xion Dec 22, 2008.
+
+[Bug Fix]
+Fixed "sacrifice all" fucntion. Bug raised by Hasjman.
+Code changes in act_obj.c. Function do_sacrifice and sac_obj.
+-Xion Dec 26, 2008.
+
+[Bug Fix]
+Fixed incorrect printing of shop list by switching variables
+in shops.c
+-Mordred December 28, 2008
+
+[Bug Fix]
+Swapped int and wiz in the do_reroll function of player.c
+
+Fixed the nested rat by adding a string compare of the first 3 char of the "argument" string.
+-Sywin December 29, 2008
+
+Added some level checks to check_illegal_pk in fight.c to account for
+remort levels.
+-Andy December 29, 2008
+
+Did some work false criticals in fight.c Added a bool variable victim_damaged, used as check for AC hit or not.
+Still needs work, doesn't quite work yet.
+-Sywin December 29, 2008
+
+
+Added a workaround to criticals so that if damage = 0 or less damage is then set to 1 to prevent a critical
+from deal no damage at all.
+-Sywin December 29, 2008
+
+Reworked the if statements in is_legal_kill function in skills.c (start line 150 or so) to avoid what appeared
+to be an incorrect return of TRUE automatically.  Seemed to be the problem for hitall, but didn't seem to fix
+the problem (it appears that it is attacking all players because is_legal_kill is always evaluating TRUE).
+i left my changes in there, but it still should be reviewed, since obviously it's still not working.
+-Mordred January 2, 2009
+
+Uncommented correct macro for IS_PKILL in mud.h - fixing hitall problem.
+-Mordred January 2, 2009
+
+Changed wimpy for mobs to start fleeing at 25% fight.c
+-Andy January 3, 2009
+
+Changed can_astral to be a bit less restrictive by commenting out osme of the ifchecks.
+-Andy Jan 4, 2009
+
+Changed do_who in act_info.c, with the help of reaper, to display idle times for
+people who are idle. Like this: [AWAY:420]
+-Andy January 5, 2009
+
+Added get_adept_remort() to the end of remort.c. This should fix the problem
+where you adept skills at the percentage of your last remort. I also changed
+all references to the now old GET_ADEPT to work with this new function.
+-Andy January 5, 2009
