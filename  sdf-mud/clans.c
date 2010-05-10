@@ -46,6 +46,8 @@ CLAN_DATA *get_clan( char *name )
 
    for( clan = first_clan; clan; clan = clan->next )
    {
+	  if (!clan)
+		  return NULL;
       if( !str_cmp( name, clan->name ) )
          return clan;
    }
@@ -70,7 +72,7 @@ void write_clan_list(  )
 
    sprintf( filename, "%s%s", CLAN_DIR, CLAN_LIST );
    fpout = fopen( filename, "w" );
-   if( !fpout )
+   if (fpout == NULL)
    {
       bug( "FATAL: cannot open clan.lst for writing!\r\n", 0 );
       return;
