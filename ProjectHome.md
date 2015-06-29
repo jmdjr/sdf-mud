@@ -1,0 +1,1 @@
+SDFMud is a fork of the ResortMud 6.0 codebase (which itself has roots in Merc, Diku, and, ultimately, SMAUG).  The source is C code with a flat-file backend.  Those looking for old Smaug areas may be able to find more than are readily available elsewhere, although much is also new development that is still in progress.
